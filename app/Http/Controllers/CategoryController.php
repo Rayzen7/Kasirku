@@ -12,7 +12,7 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function categoryStore(Request $request)
     {
         $validateData = Validator::make($request->all(), [
             'name' => 'required'
@@ -29,14 +29,15 @@ class CategoryController extends Controller
         ]);
 
         return Inertia::render('Transaction', [
-            'success' => "Data Berhasil Ditambahkan"
+            'success' => "Data Berhasil Ditambahkan",
+            'redirect' => '/transaksi'
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function categoryUpdate(Request $request, string $id)
     {
         $category = Category::find($id);
         if (!$category) {
@@ -67,7 +68,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function categoryDestroy(string $id)
     {
         $category = Category::find($id);
         if (!$category) {

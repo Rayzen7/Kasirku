@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -19,9 +20,8 @@ Route::middleware('auth')->group(function() {
         return Inertia::render('Home');
     })->name('dashboardPage');
     
-    Route::resource('/transaksi', CategoryController::class);
-    // Route::resource('/')
-    Route::get('/transaksi', function() {
-        return Inertia::render('Transaction');
-    });
+    Route::resource('/transaksi', ProductController::class);
+    Route::post('/transaksi', [CategoryController::class, 'categoryStore']);
+    Route::put('/transaksi/{id}', [CategoryController::class, 'categoryUpdate']);
+    Route::delete('/transaksi/{id}', [CategoryController::class, 'categoryDestroy']);
 });

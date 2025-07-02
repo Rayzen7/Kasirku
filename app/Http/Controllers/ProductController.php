@@ -14,10 +14,15 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $category = Category::all();
-        $product = Product::with('category')->get();
+        $productByCategory = $request->input('category');
+        
+        $product = Product::with('category')->whereHas('category', function($query) use ($productByCategory) {
+            $query->where('name', $productByCategory);
+        })->orderBy('name', 'ASC')->get();
+
         return Inertia::render('Transaction', [
             'category' => $category,
             'product' => $product
