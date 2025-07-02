@@ -17,11 +17,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $category = Category::all();
-        $productByCategory = $request->input('category');
-        
-        $product = Product::with('category')->whereHas('category', function($query) use ($productByCategory) {
-            $query->where('name', $productByCategory);
-        })->orderBy('name', 'ASC')->get();
+        $product = Product::with('category')->get();
 
         return Inertia::render('Transaction', [
             'category' => $category,
@@ -36,8 +32,7 @@ class ProductController extends Controller
     {
         $validateData = Validator::make($request->all(), [
             'name' => 'required',
-            'image' => 'required',
-            'description' => 'required',
+            'image' => 'required|mimes:png,jpg,jpeg',
             'price' => 'required',
             'category_id' => 'exists:categories,id'
         ]);
@@ -54,7 +49,6 @@ class ProductController extends Controller
 
         Product::create([
             'name' => $request->name,
-            'description' => $request->description,
             'image' => $path,
             'price' => $request->price,
             'category_id' => $request->category_id
@@ -104,7 +98,6 @@ class ProductController extends Controller
         }
 
         $product->name = $request->name;
-        $product->description = $request->description;
         $product->price = $request->price;
         $product->category_id = $request->category_id;
         $product->save();

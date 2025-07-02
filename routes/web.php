@@ -21,7 +21,7 @@ Route::middleware('auth')->group(function() {
     })->name('dashboardPage');
     
     Route::resource('/transaksi', ProductController::class);
-    Route::post('/transaksi', [CategoryController::class, 'categoryStore']);
-    Route::put('/transaksi/{id}', [CategoryController::class, 'categoryUpdate']);
-    Route::delete('/transaksi/{id}', [CategoryController::class, 'categoryDestroy']);
+    Route::post('/transaksi/kategori', [CategoryController::class, 'categoryStore']);
+    Route::put('/transaksi/kategori/{id}', [CategoryController::class, 'categoryUpdate']);
+    Route::delete('/transaksi/kategori/{id}', [CategoryController::class, 'categoryDestroy']);
 });

@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import BtnComponent from './BtnComponent'
 import { router } from '@inertiajs/react';
 
-const CategoryToast = ({ show, setShow }: any) => {
+const ShowAddCategory = ({ show, setShow }: any) => {
     const [name, setName] = useState('');
     const handleSubmit = () => {
-        router.post('/transaksi', {
+        router.post('/transaksi/kategori', {
             name: name
         });
         setShow(!show);  
@@ -52,4 +52,4 @@ const CategoryToast = ({ show, setShow }: any) => {
   )
 }
 
-export default CategoryToast
+export default ShowAddCategory
