@@ -9,6 +9,9 @@ const ShowAddCategory = ({ show, setShow }: any) => {
             name: name
         });
         setShow(!show);  
+        setTimeout(() => {
+            window.location.reload();
+        }, 4000);
     }
 
     const handleShowCategory = () => {

@@ -24,6 +24,9 @@ const ShowAddProduct = ({ show, setShow }: any) => {
 
         router.post('/transaksi', formData);
         setShow(!show);  
+        setTimeout(() => {
+            window.location.reload();
+        }, 4000);
     }
 
     const handleShowCategory = () => {
