@@ -27,4 +27,6 @@ Route::middleware('auth')->group(function() {
     Route::post('/transaksi/kategori', [CategoryController::class, 'categoryStore']);
     Route::put('/transaksi/kategori/{id}', [CategoryController::class, 'categoryUpdate']);
     Route::delete('/transaksi/kategori/{id}', [CategoryController::class, 'categoryDestroy']);
+
+    Route::get('/riwayat', [TransactionController::class, 'index']);    
 });

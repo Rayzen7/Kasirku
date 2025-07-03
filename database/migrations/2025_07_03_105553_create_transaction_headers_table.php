@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transaction_headers', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('total_price');
             $table->enum('status', ['success', 'canceled']);
             $table->timestamps();

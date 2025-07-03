@@ -181,7 +181,7 @@ const Transaction = () => {
       <Dashboard>
           <div className="flex justify-between items-start">
             <div className="w-[54vw] m-10 px-8 py-2">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-start gap-10 items-center">
                 <h1 className='font-poppins_semibold text-[32px]'>Menu</h1>
                 {/* <div className="flex justify-center items-center gap-6">
                   <BtnComponent

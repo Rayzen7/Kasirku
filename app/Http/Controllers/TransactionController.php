@@ -16,8 +16,23 @@ class TransactionController extends Controller
     public function index()
     {
         $transactionHeader = TransactionHeader::with('transactionBody')->get();
-        return Inertia::render('', [
-            'transaction' => $transactionHeader
+        return Inertia::render('History', [
+            'transaction' => $transactionHeader->map(function($item) {
+                return [
+                    'id' => $item->id,
+                    'total_price' => $item->total_price,
+                    'status' => $item->status,
+                    'created_at' => $item->created_at,
+                    'transaction_body' => $item->transactionBody->map(function($data) {
+                        return [
+                            'id' => $data->id,
+                            'product' => $data->product,
+                            'quantity' => $data->quantity,
+                            'total' => $data->total
+                        ];
+                    })
+                ];
+            }),
         ]);
     }
 
@@ -59,7 +74,29 @@ class TransactionController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $transactionHeader = TransactionHeader::with('transactionBody')->find($id);
+        if (!$transactionHeader) {
+            return response()->json([
+                'message' => 'Data Tidak Ditemukan'
+            ], 404);
+        }
+
+        return response()->json([
+            'transaction' => [
+                'id' => $transactionHeader->id,
+                'total_price' => $transactionHeader->total_price,
+                'status' => $transactionHeader->status,
+                'created_at' => $transactionHeader->created_at,
+                'transaction_body' => $transactionHeader->transactionBody->map(function($data) {
+                    return [
+                        'id' => $data->id,
+                        'product' => $data->product,
+                        'quantity' => $data->quantity,
+                        'total' => $data->total
+                    ];
+                })
+            ]
+        ], 200);
     }
 
     /**
@@ -75,7 +112,20 @@ class TransactionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $transactionHeader = TransactionHeader::with('transactionBody')->find($id);
+        if (!$transactionHeader) {
+            return response()->json([
+                'message' => 'Data Tidak Ditemukan'
+            ], 404);
+        }
+
+        $transactionHeader->update([
+            'status' => $request->status,
+        ]);
+
+        return response()->json([
+            'message' => 'Data Berhasil Diubah!'
+        ], 200);
     }
 
     /**
