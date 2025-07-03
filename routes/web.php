@@ -29,4 +29,5 @@ Route::middleware('auth')->group(function() {
     Route::delete('/transaksi/kategori/{id}', [CategoryController::class, 'categoryDestroy']);
 
     Route::get('/riwayat', [TransactionController::class, 'index']);    
+    Route::get('/pengaturan', [ProductController::class, 'indexSettings']);
 });

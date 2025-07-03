@@ -14,7 +14,18 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
+    {
+        $category = Category::all();
+        $product = Product::with('category')->get();
+
+        return Inertia::render('Transaction', [
+            'category' => $category,
+            'product' => $product
+        ]);
+    }
+
+    public function indexSettings()
     {
         $category = Category::all();
         $product = Product::with('category')->get();
@@ -38,7 +49,7 @@ class ProductController extends Controller
         ]);
 
         if ($validateData->fails()) {
-            return Inertia::render('Transaction', [
+            return Inertia::render('Settings', [
                 'error' => 'Kolom Harus Diisi!'
             ]);
         }
@@ -54,7 +65,7 @@ class ProductController extends Controller
             'category_id' => $request->category_id
         ]);
 
-        return Inertia::render('Transaction', [
+        return Inertia::render('Settings', [
             'success' => 'Data Berhasil Ditambahkan'
         ]);
     }
