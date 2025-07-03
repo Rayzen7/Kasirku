@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -21,6 +22,8 @@ Route::middleware('auth')->group(function() {
     })->name('dashboardPage');
     
     Route::resource('/transaksi', ProductController::class);
+    Route::post('/transaksi/order', [TransactionController::class, 'store']);
+
     Route::post('/transaksi/kategori', [CategoryController::class, 'categoryStore']);
     Route::put('/transaksi/kategori/{id}', [CategoryController::class, 'categoryUpdate']);
     Route::delete('/transaksi/kategori/{id}', [CategoryController::class, 'categoryDestroy']);

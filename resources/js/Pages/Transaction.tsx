@@ -51,8 +51,18 @@ const Transaction = () => {
   }, []);
 
   const handleCategoryParam = (name: string) => {
-    router.visit(`/transaksi?name=${name}`);
-  }
+    router.get(`/transaksi?name=${name}`, {}, {
+      preserveState: true,
+      preserveScroll: true,
+    });
+
+    if (name) {
+      const filtered = page.props?.product?.filter((item: any) => item.category.name === name);
+      setProduct(filtered);
+    } else {
+      setProduct(page.props?.product);
+    }
+  };
 
   const handleShowCategory = () => {
     setShowCategory(!showCategory);
@@ -151,7 +161,7 @@ const Transaction = () => {
       </div>
       <Dashboard>
           <div className="flex justify-between items-start">
-            <div className="w-full m-10 px-8 py-2">
+            <div className="w-[54vw] m-10 px-8 py-2">
               <div className="flex justify-between items-center">
                 <h1 className='font-poppins_semibold text-[32px]'>Menu</h1>
                 <div className="flex justify-center items-center gap-6">
@@ -169,25 +179,27 @@ const Transaction = () => {
                   />
                 </div>
               </div>
-              <div className="flex mt-6 gap-5 items-center flex-wrap">
-                <div className={`py-4 px-6 rounded-lg cursor-pointer ${param == '/transaksi' + '' ? 'bg-primary text-white' : param == '/transaksi?name=' ? 'bg-primary text-white' : 'bg-white'}`} onClick={() => handleCategoryParam('')}>
+              <div className="">
+                <div className="flex mt-8 gap-5 items-center overflow-scroll scrollbar-hide">
+                  <div className={`py-4 px-6 rounded-lg cursor-pointer ${param == '/transaksi' + '' ? 'bg-primary text-white' : param == '/transaksi?name=' ? 'bg-primary text-white' : 'bg-white'}`} onClick={() => handleCategoryParam('')}>
                     <p className='text-[16px] font-poppins_medium'>Semua</p>
                   </div>
-                {category?.length > 0 ? (
-                  category.map((data, index) => (
-                    <div className={`py-4 px-6 rounded-lg cursor-pointer ${param == '/transaksi?name=' + data.name ? 'bg-primary text-white' : 'bg-white'}`} key={index} onClick={() => handleCategoryParam(data.name)}>
-                      <p className='text-[16px] font-poppins_medium'>{data.name}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p className='font-poppins_medium text-[18px]'>Data Tidak Ditemukan</p>
-                )}
+                  {category?.length > 0 ? (
+                    category.map((data, index) => (
+                      <div className={`py-4 px-6 rounded-lg cursor-pointer ${param == '/transaksi?name=' + data.name ? 'bg-primary text-white' : 'bg-white'}`} key={index} onClick={() => handleCategoryParam(data.name)}>
+                        <p className='text-[16px] font-poppins_medium'>{data.name}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className='font-poppins_medium text-[18px]'>Data Tidak Ditemukan</p>
+                  )}
+                </div>
               </div>
               <div className="mt-12 flex justify-start items-start flex-wrap gap-8">
                 {product.length > 0 ? (
                   product.map((data, index) => (
                     <div className="flex flex-col" key={index}>
-                      <div className="bg-white py-3 px-4 gap-2 text-center w-[160px] min-h-[180px] flex rounded-lg flex-col justify-center items-center">
+                      <div className="bg-white py-3 px-4 gap-2 text-center w-[200px] min-h-[180px] flex rounded-lg flex-col justify-center items-center">
                         <img className='w-full rounded-md h-[120px] object-cover' src={`/storage/${data.image}`} alt="" />
                         <h1 className='text-[14px] font-poppins_medium'>{data.name}</h1>
                         <p className='text-[16px] font-poppins_medium text-primary'>{RupiahFormat(data.price)}</p>
@@ -203,26 +215,44 @@ const Transaction = () => {
                 )}
               </div>
             </div>
-            <div className="w-[60%] bg-white h-screen px-6 py-12 flex flex-col items-center justify-start gap-4">
-                <div className="">
-                  <h1 className='font-poppins_semibold text-[26px]'>Order Menu</h1>
+            <div className="w-[34vw] bg-white h-screen px-6 py-12 flex flex-col items-center justify-between right-0 gap-4 fixed">
+                <div className="w-full">
+                  <div className="">
+                    <h1 className='font-poppins_semibold text-[30px] text-center'>Order Menu</h1>
+                  </div>
+                  <div className="h-[55vh] overflow-scroll scrollbar-hide">
+                    <div className="mt-9 w-full flex flex-col gap-10 justify-start items-center">
+                      {userTransaction.length > 0 ? (
+                        userTransaction.map((data, index) => (
+                          <div className="flex justify-between items-center w-full" key={index}>
+                            <img src={data.image} alt="" className='w-[60px] h-auto rounded-lg' />
+                            <div className="flex flex-col gap-1">
+                              <h1 className='text-[14px] font-poppins_medium'>{data.name}</h1>
+                              <p className='text-[12px] font-poppins_regular'>{RupiahFormat(data.price)}</p>
+                            </div>
+                            <p className='font-poppins_medium text-[14px]'>{data.quantity}X</p>
+                            <p className='font-poppins_medium text-white bg-primary p-2 rounded-lg text-[14px]'>{RupiahFormat(data.totalPrice)}</p>
+                          </div>
+                        ))
+                      ) : (
+                        <p className='text-[16px] font-poppins_regular'>Belum Ada Orderan</p>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <div className="mt-6 w-full flex flex-col gap-8 justify-start items-center">
-                  {userTransaction.length > 0 ? (
-                    userTransaction.map((data, index) => (
-                      <div className="flex justify-between items-center w-full" key={index}>
-                        <img src={data.image} alt="" className='w-[60px] h-auto rounded-lg' />
-                        <div className="flex flex-col gap-1">
-                          <h1 className='text-[14px] font-poppins_medium'>{data.name}</h1>
-                          <p className='text-[12px] font-poppins_regular'>{RupiahFormat(data.price)}</p>
-                        </div>
-                        <p className='font-poppins_medium text-[14px]'>{data.quantity}X</p>
-                        <p className='font-poppins_medium text-white bg-primary p-2 rounded-lg text-[14px]'>{RupiahFormat(data.totalPrice)}</p>
-                      </div>
-                    ))
-                  ) : (
-                    <p className='text-[16px] font-poppins_regular'>Belum Ada Orderan</p>
-                  )}
+                <div className={`w-full mt-6 ${userTransaction.length > 0 ? 'block' : 'hidden'}`}>
+                  <hr className='w-full h-[2px] bg-[#b0b0b0] outline-none' />
+                  <div className="flex justify-between items-center mt-4">
+                    <h1 className='font-poppins_medium text-[18px]'>Total :</h1>
+                    <p className='font-poppins_medium text-[16px]'>gatau</p>
+                  </div>
+                  <div className="mt-6">
+                    <BtnComponent
+                      icon='submit'
+                      type='submit'
+                      text='Bayar'
+                    />
+                  </div>
                 </div>
             </div>
           </div>
