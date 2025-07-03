@@ -1,11 +1,8 @@
 import React from 'react'
 import logo from '../../../public/logo/logo.png'
 import { usePage, router } from '@inertiajs/react'
-import { ToastContainer } from 'react-toastify';
-import MessageProps from '@/Utils/MessageProps';
 
 const SiderBar = () => {
-  MessageProps();
   const page = usePage<any>();
   const handleRouter = (page: string) => {
     router.visit(page);
@@ -40,7 +37,6 @@ const SiderBar = () => {
           <p className='font-poppins_regular text-[10px]'>Keluar</p>
         </div>
       </div>
-      <ToastContainer/>
     </div>
   )
 }

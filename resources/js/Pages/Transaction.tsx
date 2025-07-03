@@ -16,7 +16,9 @@ const Transaction = () => {
   const paramName = new URLSearchParams(page.url.split('?')[1]);
   const newParamName = paramName.get('name');
   const [quantity, setQuantity] = useState<any>({});
+  const [searchText, setSearchText] = useState('');
   const [userTransaction, setUserTransaction] = useState<productProp[]>([]);
+  const [totalPrice, setTotalPrice] = useState<any>(0);
 
   interface categoryProp {
     id: number;
@@ -25,12 +27,14 @@ const Transaction = () => {
 
   interface productProp {
     id: number;
+    productId: number;
     name: string;
     category_id: number;
     image: string;
     price: number;
     quantity: number;
     totalPrice: number;
+    [key: string]: any;
   }
 
   useEffect(() => {
@@ -39,16 +43,24 @@ const Transaction = () => {
     }
 
     const fetchProduct = (categoryName: any) => {
-      if (categoryName) {
-        setProduct(page.props?.product?.filter((item: any) => item.category.name === categoryName));
-      } else {
-        setProduct(page.props?.product);
-      }
+      const filtered = page.props?.product?.filter((item: any) => {
+        const matchCategory = categoryName ? item.category.name === categoryName : true;
+        const matchSearch = item.name.toLowerCase().includes(searchText.toLowerCase());
+        return matchSearch && matchCategory;
+      });
+
+      setProduct(filtered);
     }
 
+    const fetchTotalTransaction = () => {
+      const totalPrice = userTransaction.reduce((acc, item) => acc + item.totalPrice, 0);
+      setTotalPrice(totalPrice);
+    }
+
+    fetchTotalTransaction();
     fetchCategory();
     fetchProduct(newParamName);
-  }, []);
+  }, [userTransaction, newParamName, searchText]);
 
   const handleCategoryParam = (name: string) => {
     router.get(`/transaksi?name=${name}`, {}, {
@@ -56,12 +68,12 @@ const Transaction = () => {
       preserveScroll: true,
     });
 
-    if (name) {
-      const filtered = page.props?.product?.filter((item: any) => item.category.name === name);
-      setProduct(filtered);
-    } else {
-      setProduct(page.props?.product);
-    }
+    const filtered = page?.props?.product.filter((item: any) => {
+      const matchesCategory = name ? item.category.name === name : true;
+      return matchesCategory;
+    });
+
+    setProduct(filtered);
   };
 
   const handleShowCategory = () => {
@@ -145,6 +157,13 @@ const Transaction = () => {
     });
   };
 
+  const handleSubmit = () => {
+    router.post('/transaksi/order', {
+      total_price: totalPrice,
+      items: userTransaction,
+    })
+  }
+
   return (
     <div>
       <div className={`${showCategory == false ? 'hidden' : 'block'}`}>
@@ -164,7 +183,7 @@ const Transaction = () => {
             <div className="w-[54vw] m-10 px-8 py-2">
               <div className="flex justify-between items-center">
                 <h1 className='font-poppins_semibold text-[32px]'>Menu</h1>
-                <div className="flex justify-center items-center gap-6">
+                {/* <div className="flex justify-center items-center gap-6">
                   <BtnComponent
                     icon='add'
                     text='Produk'
@@ -177,7 +196,14 @@ const Transaction = () => {
                     paddingX='14'
                     onClick={handleShowCategory}
                   />
-                </div>
+                </div> */}
+                <input 
+                  type="text" 
+                  placeholder='Cari...'
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  className='text-[14px] font-poppins_medium w-[360px] px-3 py-2 border-2 outline-none border-[#aeadad] rounded-md focus-within:border-black'
+                />
               </div>
               <div className="">
                 <div className="flex mt-8 gap-5 items-center overflow-scroll scrollbar-hide">
@@ -244,13 +270,14 @@ const Transaction = () => {
                   <hr className='w-full h-[2px] bg-[#b0b0b0] outline-none' />
                   <div className="flex justify-between items-center mt-4">
                     <h1 className='font-poppins_medium text-[18px]'>Total :</h1>
-                    <p className='font-poppins_medium text-[16px]'>gatau</p>
+                    <p className='font-poppins_medium text-[16px]'>{RupiahFormat(totalPrice)}</p>
                   </div>
                   <div className="mt-6">
                     <BtnComponent
                       icon='submit'
                       type='submit'
                       text='Bayar'
+                      onClick={handleSubmit}
                     />
                   </div>
                 </div>

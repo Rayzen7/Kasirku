@@ -42,14 +42,15 @@ class TransactionController extends Controller
         foreach ($request->items as $item) {
             TransactionBody::create([
                 'transaction_header_id' => $transactionHeader->id,
-                'product_id' => $item["product_id"],
+                'product_id' => $item["productId"],
                 'quantity' => $item["quantity"],
-                'total' => $item["total"],
+                'total' => $item["totalPrice"],
             ]);
         }
 
-        return Inertia::render('/transaksi/order', [
-            'success' => 'Transaksi Berhasil!'
+        return Inertia::render('Transaction', [
+            'message' => 'Transaksi Berhasil!',
+            'redirect' => '/transaksi'
         ]);
     }
 

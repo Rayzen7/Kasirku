@@ -1,8 +1,11 @@
 import SiderBar from '@/Components/SiderBar'
+import MessageProps from '@/Utils/MessageProps'
 import { Head } from '@inertiajs/react'
 import React from 'react'
+import { ToastContainer } from 'react-toastify'
 
 const Dashboard = ({ children }: any) => {
+  MessageProps();
   return (
     <div>
       <Head title='Beranda Kasirku'/>
@@ -14,6 +17,7 @@ const Dashboard = ({ children }: any) => {
           {children}
         </div>
       </div>
+      <ToastContainer/>
     </div>
   )
 }
