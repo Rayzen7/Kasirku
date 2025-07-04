@@ -29,9 +29,13 @@ const monthNames = [
 ];
 
 const Chart = () => {
-  const { transaction_yearly } = usePage().props as unknown as {
-    transaction_yearly: Record<string, Record<string, number>>;
+  const { transaction_yearly } = usePage().props as {
+    transaction_yearly?: Record<string, Record<string, number>>;
   };
+
+  if (!transaction_yearly || Object.keys(transaction_yearly).length === 0) {
+    return;
+  }
 
   const yearList = Object.keys(transaction_yearly);
   const [selectedYear, setSelectedYear] = useState<string>(yearList[0]);
