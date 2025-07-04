@@ -19,8 +19,9 @@ class CategoryController extends Controller
         ]);
 
         if ($validateData->fails()) {
-            return Inertia::render('Transaction', [
-                'error' => 'Kolom Harus Diisi!'
+            return Inertia::render('Settings', [
+                'error' => 'Kolom Harus Diisi!',
+                'redirect' => '/pengaturan'
             ]);
         }
 
@@ -28,9 +29,9 @@ class CategoryController extends Controller
             'name' => $request->name
         ]);
 
-        return Inertia::render('Transaction', [
+        return Inertia::render('Settings', [
             'success' => "Data Berhasil Ditambahkan",
-            'redirect' => '/transaksi'
+            'redirect' => '/pengaturan'
         ]);
     }
 

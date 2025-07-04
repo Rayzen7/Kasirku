@@ -51,8 +51,8 @@ const ShowDetailTransaction = ({ transactionId, setShow, show }: any) => {
         title: 'Ubah Status Transaksi?',
         input: 'select',
         inputOptions: {
-          success: 'success',
-          canceled: 'canceled'
+          success: 'Berhasil',
+          canceled: 'Dibatalkan'
         },
         inputLabel: 'Masukkan status baru',
         showCancelButton: true,
@@ -118,7 +118,7 @@ const ShowDetailTransaction = ({ transactionId, setShow, show }: any) => {
               <hr className='outline-none bg-black h-[2px] w-full mt-2'/>
               <div className="flex justify-between items-center gap-2 w-full">
                 <p className='font-poppins_regular text-[16px]'>Total :</p>
-                <p className='font-poppins_medium text-[14px]'>{RupiahFormat(transactionData?.total_price)}</p>
+                <p className='font-poppins_medium text-[16px]'>{RupiahFormat(transactionData?.total_price)}</p>
               </div>
               <div className="flex justify-between items-center gap-2 w-full">
                 <p className='font-poppins_regular text-[16px]'>Status :</p>

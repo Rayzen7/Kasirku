@@ -15,7 +15,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $transactionHeader = TransactionHeader::with('transactionBody')->get();
+        $transactionHeader = TransactionHeader::with('transactionBody')->orderBy('created_at', 'DESC')->get();
         return Inertia::render('History', [
             'transaction' => $transactionHeader->map(function($item) {
                 return [

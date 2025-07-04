@@ -22,7 +22,7 @@ const ShowAddProduct = ({ show, setShow }: any) => {
         formData.append('image', image);
         formData.append('category_id', categoryId);
 
-        router.post('/transaksi', formData);
+        router.post('/pengaturan', formData);
         setShow(!show);  
         setTimeout(() => {
             window.location.reload();

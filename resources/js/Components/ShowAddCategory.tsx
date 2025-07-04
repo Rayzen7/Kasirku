@@ -5,7 +5,7 @@ import { router } from '@inertiajs/react';
 const ShowAddCategory = ({ show, setShow }: any) => {
     const [name, setName] = useState('');
     const handleSubmit = () => {
-        router.post('/transaksi/kategori', {
+        router.post('/pengaturan/kategori', {
             name: name
         });
         setShow(!show);  

@@ -44,6 +44,10 @@ const MessageProps = () => {
         theme: 'colored',
         autoClose: 2000,
       });
+
+      setTimeout(() => {
+        router.visit(props?.redirect);
+      }, 3000);
     }
   }, [props]);
 };

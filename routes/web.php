@@ -21,13 +21,14 @@ Route::middleware('auth')->group(function() {
         return Inertia::render('Home');
     })->name('dashboardPage');
     
-    Route::resource('/transaksi', ProductController::class);
-    Route::post('/transaksi/order', [TransactionController::class, 'store']);
-
-    Route::post('/transaksi/kategori', [CategoryController::class, 'categoryStore']);
-    Route::put('/transaksi/kategori/{id}', [CategoryController::class, 'categoryUpdate']);
-    Route::delete('/transaksi/kategori/{id}', [CategoryController::class, 'categoryDestroy']);
-
+    Route::get('/transaksi', [ProductController::class, 'index']);
+    Route::post('/transaksi/order', [TransactionController::class, 'store']);    
+    
     Route::get('/riwayat', [TransactionController::class, 'index']);    
+
+    Route::resource('/pengaturan', ProductController::class);
     Route::get('/pengaturan', [ProductController::class, 'indexSettings']);
+    Route::post('/pengaturan/kategori', [CategoryController::class, 'categoryStore']);
+    Route::put('/pengaturan/kategori/{id}', [CategoryController::class, 'categoryUpdate']);
+    Route::delete('/pengaturan/kategori/{id}', [CategoryController::class, 'categoryDestroy']);
 });

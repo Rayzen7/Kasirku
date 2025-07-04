@@ -30,7 +30,7 @@ class ProductController extends Controller
         $category = Category::all();
         $product = Product::with('category')->get();
 
-        return Inertia::render('Transaction', [
+        return Inertia::render('Settings', [
             'category' => $category,
             'product' => $product
         ]);

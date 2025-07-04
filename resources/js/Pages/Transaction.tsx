@@ -225,14 +225,15 @@ const Transaction = () => {
                 {product.length > 0 ? (
                   product.map((data, index) => (
                     <div className="flex flex-col" key={index}>
-                      <div className="bg-white py-3 px-4 gap-2 text-center w-[200px] min-h-[180px] flex rounded-lg flex-col justify-center items-center">
-                        <img className='w-full rounded-md h-[120px] object-cover' src={`/storage/${data.image}`} alt="" />
-                        <h1 className='text-[14px] font-poppins_medium'>{data.name}</h1>
-                        <p className='text-[16px] font-poppins_medium text-primary'>{RupiahFormat(data.price)}</p>
-                        <div className="flex justify-center items-center mt-2 gap-4">
-                          <svg onClick={() => handleMinusQuantity(data.id)} className='w-[24px] h-auto fill-[#606060] border-2 border-[#606060] cursor-pointer p-1 rounded-md' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
-                          <p className='text-[16px] font-poppins_semibold text-primary'>{quantity[data.id] | 0}</p>
-                          <svg onClick={() => handlePlusQuantity(data.id)} className='w-[24px] h-auto fill-[#606060] border-2 border-[#606060] cursor-pointer p-1 rounded-md' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/></svg>                  </div>
+                        <div className="bg-white py-3 px-4 gap-2 text-center w-[200px] min-h-[180px] flex rounded-lg flex-col justify-center items-center">
+                          <img className='w-full rounded-md h-[120px] object-cover' src={`/storage/${data.image}`} alt="" />
+                          <h1 className='text-[14px] font-poppins_medium'>{data.name}</h1>
+                          <p className='text-[16px] font-poppins_medium text-primary'>{RupiahFormat(data.price)}</p>
+                          <div className="flex justify-center items-center mt-2 gap-4">
+                            <svg onClick={() => handleMinusQuantity(data.id)} className='w-[24px] h-auto fill-[#606060] border-2 border-[#606060] cursor-pointer p-1 rounded-md' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/></svg>
+                            <p className='text-[16px] font-poppins_semibold text-primary'>{quantity[data.id] | 0}</p>
+                            <svg onClick={() => handlePlusQuantity(data.id)} className='w-[24px] h-auto fill-[#606060] border-2 border-[#606060] cursor-pointer p-1 rounded-md' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/></svg>
+                          </div>
                         </div>
                     </div>
                   ))
