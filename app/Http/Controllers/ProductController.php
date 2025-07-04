@@ -66,7 +66,7 @@ class ProductController extends Controller
         ]);
 
         return Inertia::render('Settings', [
-            'success' => 'Data Berhasil Ditambahkan'
+            'message' => 'Data Berhasil Ditambahkan'
         ]);
     }
 
@@ -76,15 +76,15 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $product = Product::with('category')->find($id);
-        if ($product) {
-            return Inertia::render('Transaction', [
-                'error' => 'Data Tidak Ditemukan'
-            ]);
+        if (!$product) {
+            return response()->json([
+                'error' => 'Data Tidak Ditemukan!'
+            ], 404);
         }
 
-        return Inertia::render('Transaction', [
+        return response()->json([
             'product' => $product
-        ]);
+        ], 200);
     }
 
     /**
@@ -93,14 +93,26 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         $product = Product::find($id);
-        if ($product) {
-            return Inertia::render('Transaction', [
-                'error' => 'Data Tidak Ditemukan'
-            ]);
+        if (!$product) {
+            return response()->json([
+                'message' => 'Data Tidak Ditemukan!'
+            ], 404);
         }
 
-        if ($product->image) {
-            if ($request->image) {
+        $validateData = Validator::make($request->all(), [
+            'name' =>'required',            
+            'price' => 'required',
+            'category_id' => 'required|exists:categories,id'
+        ]);
+
+        if ($validateData->fails()) {
+            return response()->json([
+                'message' => 'Kolom Harus Diisi!',
+            ], 422);
+        }
+
+        if ($request->hasFile('image')) {
+            if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }
 
@@ -113,9 +125,9 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->save();
 
-        return Inertia::render('Transaction', [
-            'success' => "Data Berhasil Diubah"
-        ]);
+        return response()->json([
+            'message' => 'Data Berhasil Diubah'
+        ], 200);
     }
 
     /**
@@ -124,15 +136,16 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         $product = Product::find($id);
-        if ($product) {
-            return Inertia::render('Transaction', [
-                'error' => 'Data Tidak Ditemukan'
-            ]);
+        if (!$product) {
+            return response()->json([
+                'error' => 'Data Tidak Ditemukan!'
+            ], 404);
         }
         
+        Storage::disk('public')->delete($product->image);
         $product->delete();
-        return Inertia::render('Transaction', [
-            'success' => "Data Berhasil Dihapus"
-        ]);
+        return response()->json([
+            'message' => 'Data Berhasil Dihapus'
+        ], 200);
     }
 }

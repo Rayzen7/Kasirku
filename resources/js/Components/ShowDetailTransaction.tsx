@@ -106,6 +106,14 @@ const ShowDetailTransaction = ({ transactionId, setShow, show }: any) => {
             </div>
             <h1 className='font-poppins_semibold text-[28px]'>Detail Transaksi</h1>
             <div className="mt-6 flex flex-col gap-4 justify-center items-center w-full">
+              <div className="flex justify-between items-center gap-2 w-full">
+                <p className='font-poppins_regular text-[16px]'>ID Transaksi :</p>
+                <p className='font-poppins_regular text-[14px]'>{`Order-${transactionData?.id}`}</p>
+              </div>
+              <div className="flex justify-between items-center gap-2 w-full">
+                <p className='font-poppins_regular text-[16px]'>Waktu :</p>
+                <p className='font-poppins_regular text-[14px]'>{transactionData?.created_at.slice(0, 10)}</p>
+              </div>
               <hr className='outline-none bg-black h-[2px] w-full'/>
               <div className="flex flex-col gap-2 w-full">
                 {transactionData?.transaction_body.map((item: any, index: any) => (

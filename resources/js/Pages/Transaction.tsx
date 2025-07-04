@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Dashboard from './Dashboard'
 import { router, usePage } from '@inertiajs/react'
 import BtnComponent from '@/Components/BtnComponent'
-import ShowAddCategory from '@/Components/ShowAddCategory'
-import ShowAddProduct from '@/Components/ShowAddProduct'
 import RupiahFormat from '@/Utils/RupiahFormat'
 
 const Transaction = () => {
@@ -11,8 +9,6 @@ const Transaction = () => {
   const [category, setCategory] = useState<categoryProp[]>([]);
   const [product, setProduct] = useState<productProp[]>([]);
   const param = page.url;
-  const [showCategory, setShowCategory] = useState(false);
-  const [showProduct, setShowProduct] = useState(false);
   const paramName = new URLSearchParams(page.url.split('?')[1]);
   const newParamName = paramName.get('name');
   const [quantity, setQuantity] = useState<any>({});
@@ -75,14 +71,6 @@ const Transaction = () => {
 
     setProduct(filtered);
   };
-
-  const handleShowCategory = () => {
-    setShowCategory(!showCategory);
-  }
-
-  const handleShowProduct = () => {
-    setShowProduct(!showProduct);
-  }
 
   const handlePlusQuantity = (productId: number) => {
     const productData = product.find((item) => item.id === productId);
@@ -166,37 +154,11 @@ const Transaction = () => {
 
   return (
     <div>
-      <div className={`${showCategory == false ? 'hidden' : 'block'}`}>
-        <ShowAddCategory
-          show={showCategory}
-          setShow={setShowCategory}
-        />
-      </div>
-      <div className={`${showProduct == false ? 'hidden' : 'block'}`}>
-        <ShowAddProduct
-          show={showProduct}
-          setShow={setShowProduct}
-        />
-      </div>
       <Dashboard>
           <div className="flex justify-between items-start">
             <div className="w-[54vw] m-10 px-8 py-2">
               <div className="flex justify-start gap-10 items-center">
                 <h1 className='font-poppins_semibold text-[32px]'>Menu</h1>
-                {/* <div className="flex justify-center items-center gap-6">
-                  <BtnComponent
-                    icon='add'
-                    text='Produk'
-                    paddingX='14'
-                    onClick={handleShowProduct}
-                  />
-                  <BtnComponent
-                    icon='add'
-                    text='Kategori'
-                    paddingX='14'
-                    onClick={handleShowCategory}
-                  />
-                </div> */}
                 <input 
                   type="text" 
                   placeholder='Cari...'
@@ -212,7 +174,7 @@ const Transaction = () => {
                   </div>
                   {category?.length > 0 ? (
                     category.map((data, index) => (
-                      <div className={`py-4 px-6 rounded-lg cursor-pointer ${param == '/transaksi?name=' + data.name ? 'bg-primary text-white' : 'bg-white'}`} key={index} onClick={() => handleCategoryParam(data.name)}>
+                      <div className={`py-4 px-6 rounded-lg cursor-pointer ${param == '/transaksi?name=' + encodeURIComponent(data.name) ? 'bg-primary text-white' : 'bg-white'}`} key={index} onClick={() => handleCategoryParam(data.name)}>
                         <p className='text-[16px] font-poppins_medium'>{data.name}</p>
                       </div>
                     ))
@@ -247,8 +209,8 @@ const Transaction = () => {
                   <div className="">
                     <h1 className='font-poppins_semibold text-[30px] text-center'>Order Menu</h1>
                   </div>
-                  <div className="h-[55vh] overflow-scroll scrollbar-hide">
-                    <div className="mt-9 w-full flex flex-col gap-10 justify-start items-center">
+                  <div className="h-[48vh] overflow-scroll scrollbar-hide mt-9">
+                    <div className="w-full flex flex-col gap-10 justify-start items-center">
                       {userTransaction.length > 0 ? (
                         userTransaction.map((data, index) => (
                           <div className="flex justify-between items-center w-full" key={index}>

@@ -24,7 +24,7 @@ const MessageProps = () => {
           Swal.showLoading();
         },
         allowOutsideClick: false,
-        title: "Please wait...",
+        title: "Tunggu Sebentar...",
         timer: 1000,
         timerProgressBar: true
       }).then(() => {

@@ -5,6 +5,9 @@ import BtnComponent from '@/Components/BtnComponent'
 import ShowAddCategory from '@/Components/ShowAddCategory'
 import ShowAddProduct from '@/Components/ShowAddProduct'
 import RupiahFormat from '@/Utils/RupiahFormat'
+import ShowEditProduct from '@/Components/ShowEditProduct'
+import Swal from 'sweetalert2'
+import axios from 'axios'
 
 const Settings = () => {
 const page = usePage<any>();
@@ -15,10 +18,8 @@ const page = usePage<any>();
   const [showProduct, setShowProduct] = useState(false);
   const paramName = new URLSearchParams(page.url.split('?')[1]);
   const newParamName = paramName.get('name');
-  const [quantity, setQuantity] = useState<any>({});
-  const [searchText, setSearchText] = useState('');
-  const [userTransaction, setUserTransaction] = useState<productProp[]>([]);
-  const [totalPrice, setTotalPrice] = useState<any>(0);
+  const [productId, setProductId] = useState(0);
+  const [showEditProduct, setShowEditProduct] = useState(false);
 
   interface categoryProp {
     id: number;
@@ -45,22 +46,15 @@ const page = usePage<any>();
     const fetchProduct = (categoryName: any) => {
       const filtered = page.props?.product?.filter((item: any) => {
         const matchCategory = categoryName ? item.category.name === categoryName : true;
-        const matchSearch = item.name.toLowerCase().includes(searchText.toLowerCase());
-        return matchSearch && matchCategory;
+        return matchCategory;
       });
 
       setProduct(filtered);
     }
 
-    const fetchTotalTransaction = () => {
-      const totalPrice = userTransaction.reduce((acc, item) => acc + item.totalPrice, 0);
-      setTotalPrice(totalPrice);
-    }
-
-    fetchTotalTransaction();
     fetchCategory();
     fetchProduct(newParamName);
-  }, [userTransaction, newParamName, searchText]);
+  }, [newParamName]);
 
   const handleCategoryParam = (name: string) => {
     router.get(`/pengaturan?name=${name}`, {}, {
@@ -84,6 +78,53 @@ const page = usePage<any>();
     setShowProduct(!showProduct);
   }
 
+  const handleShowEditProduct = (id: number) => {
+    setShowEditProduct(!showEditProduct);
+    setProductId(id);
+  }
+
+  const handleDeleteProduct = (id: number, name: string) => {
+      try {        
+        Swal.fire({
+          didOpen: () => {
+            Swal.showLoading();
+          },
+          allowOutsideClick: false,
+          title: "Tunggu Sebentar...",
+          timer: 1000,
+          timerProgressBar: true
+        }).then(() => {
+          Swal.fire({
+            icon: 'question',
+            title: `Hapus Produk "${name}"?`,
+            confirmButtonText: 'Iya',
+            confirmButtonColor: 'red',
+            showCancelButton: true,
+            cancelButtonColor: 'green',
+            cancelButtonText: 'Tidak'
+          }).then(async(result) => {
+            if (result.isConfirmed) {
+              const response = await axios.delete(`/api/pengaturan/menu/${id}`);
+              Swal.fire({
+                icon: 'success',
+                title: response.data.message,
+                confirmButtonText: 'Oke',
+                confirmButtonColor: 'green'
+              });
+
+              setTimeout(() => {
+                window.location.reload();
+              }, 2000);
+            }
+          });
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+        });
+      }
+  }
+
   return (
     <div>
       <div className={`${showCategory == false ? 'hidden' : 'block'}`}>
@@ -96,6 +137,13 @@ const page = usePage<any>();
         <ShowAddProduct
           show={showProduct}
           setShow={setShowProduct}
+        />
+      </div>
+      <div className={`${showEditProduct == false ? 'hidden' : 'block'}`}>
+        <ShowEditProduct
+          show={showEditProduct}
+          setShow={setShowEditProduct}
+          productId={productId}
         />
       </div>
       <Dashboard>
@@ -147,11 +195,13 @@ const page = usePage<any>();
                                     icon='edit'
                                     paddingX='9'
                                     paddingY='9'
+                                    onClick={() => handleShowEditProduct(data.id)}
                                 />
                                 <BtnComponent
                                     icon='delete'
                                     paddingX='9'
                                     paddingY='9'
+                                    onClick={() => handleDeleteProduct(data.id, data.name)}
                                 />
                             </div>
                         </div>
