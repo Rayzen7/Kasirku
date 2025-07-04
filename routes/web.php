@@ -15,9 +15,7 @@ Route::get('/', [AuthController::class, 'showLogin'])->name('loginPage');
 
 Route::middleware('auth')->group(function() {
     Route::post('/beranda', [AuthController::class, 'logout']);
-    Route::get('/beranda', function() {
-        return Inertia::render('Home');
-    })->name('dashboardPage');
+    Route::get('/beranda', [AuthController::class, 'home'])->name('dashboardPage');
     
     Route::get('/transaksi', [ProductController::class, 'index']);
     Route::post('/transaksi/order', [TransactionController::class, 'store']);    

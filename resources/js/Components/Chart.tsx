@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { usePage } from '@inertiajs/react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -22,17 +23,27 @@ ChartJS.register(
   Legend
 );
 
+const monthNames = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
+
 const Chart = () => {
-  const data = {
-    labels: [
-      'Januari 2025', 'Februari 2025', 'Maret 2025', 'April 2025',
-      'Mei 2025', 'Juni 2025', 'Juli 2025', 'Agustus 2025',
-      'September 2025', 'Oktober 2025', 'November 2025', 'Desember 2025'
-    ],
+  const { transaction_yearly } = usePage().props as unknown as {
+    transaction_yearly: Record<string, Record<string, number>>;
+  };
+
+  const yearList = Object.keys(transaction_yearly);
+  const [selectedYear, setSelectedYear] = useState<string>(yearList[0]);
+
+  const monthlyData = transaction_yearly[selectedYear] || {};
+
+  const chartData = {
+    labels: monthNames.map(month => `${month} ${selectedYear}`),
     datasets: [
       {
         label: 'Total Transaksi Per-bulan',
-        data: [0, 0, 0, 460000, 410000, 260000, 0, 0, 0, 0, 0, 0],
+        data: monthNames.map(month => monthlyData[month.toLowerCase()] || 0),
         borderColor: '#277BF8',
         backgroundColor: 'rgba(0, 188, 212, 0.2)',
         tension: 0.3,
@@ -72,7 +83,24 @@ const Chart = () => {
     },
   };
 
-  return <Line data={data} className='mt-16' options={options} />;
+  return (
+    <div className="mt-16">
+      <div className="mb-4">
+        <label className="mr-2">Pilih Tahun:</label>
+        <select
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
+          className="border rounded p-2"
+        >
+          {yearList.map((year) => (
+            <option key={year} value={year}>{year}</option>
+          ))}
+        </select>
+      </div>
+
+      <Line data={chartData} options={options} />
+    </div>
+  );
 };
 
 export default Chart;
