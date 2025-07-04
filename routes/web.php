@@ -11,9 +11,7 @@ use Inertia\Inertia;
 
 
 Route::post('/', [AuthController::class, 'login']);
-Route::get('/', function() {
-    return Inertia::render('Auth/Login');
-})->name('loginPage');
+Route::get('/', [AuthController::class, 'showLogin'])->name('loginPage');
 
 Route::middleware('auth')->group(function() {
     Route::post('/beranda', [AuthController::class, 'logout']);
@@ -28,7 +26,5 @@ Route::middleware('auth')->group(function() {
 
     Route::resource('/pengaturan', ProductController::class);
     Route::get('/pengaturan', [ProductController::class, 'indexSettings']);
-    Route::post('/pengaturan/kategori', [CategoryController::class, 'categoryStore']);
-    Route::put('/pengaturan/kategori/{id}', [CategoryController::class, 'categoryUpdate']);
-    Route::delete('/pengaturan/kategori/{id}', [CategoryController::class, 'categoryDestroy']);
+    Route::post('/pengaturan/kategori', [CategoryController::class, 'categoryStore']);    
 });

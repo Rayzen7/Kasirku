@@ -10,7 +10,7 @@ const ShowAddCategory = ({ show, setShow }: any) => {
         });
         setShow(!show);  
         setTimeout(() => {
-            window.location.reload();
+            window.location.href = '/pengaturan';
         }, 4000);
     }
 

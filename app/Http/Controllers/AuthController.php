@@ -11,6 +11,11 @@ use Inertia\Inertia;
 
 class AuthController extends Controller
 {
+    public function showLogin()
+    {
+        return Inertia::render('Auth/Login');
+    }
+
     public function login(Request $request)
     {
         $validateData = Validator::make($request->all(), [

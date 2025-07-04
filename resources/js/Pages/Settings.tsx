@@ -125,6 +125,48 @@ const page = usePage<any>();
       }
   }
 
+  const handleDeleteCategory= (id: number, name: string) => {
+      try {        
+        Swal.fire({
+          didOpen: () => {
+            Swal.showLoading();
+          },
+          allowOutsideClick: false,
+          title: "Tunggu Sebentar...",
+          timer: 1000,
+          timerProgressBar: true
+        }).then(() => {
+          Swal.fire({
+            icon: 'question',
+            title: `Hapus Kategori "${name}"?`,
+            confirmButtonText: 'Iya',
+            confirmButtonColor: 'red',
+            showCancelButton: true,
+            cancelButtonColor: 'green',
+            cancelButtonText: 'Tidak'
+          }).then(async(result) => {
+            if (result.isConfirmed) {
+              const response = await axios.delete(`/api/pengaturan/kategori/${id}`);
+              Swal.fire({
+                icon: 'success',
+                title: response.data.message,
+                confirmButtonText: 'Oke',
+                confirmButtonColor: 'green'
+              });
+
+              setTimeout(() => {
+                window.location.href = '/pengaturan';
+              }, 2000);
+            }
+          });
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+        });
+      }
+  }
+
   return (
     <div>
       <div className={`${showCategory == false ? 'hidden' : 'block'}`}>
@@ -167,13 +209,21 @@ const page = usePage<any>();
                 </div>
               </div>
               <div className="">
-                <div className="flex mt-8 gap-5 items-center overflow-scroll scrollbar-hide">
+                <div className="flex mt-8 gap-5 items-center overflow-scroll py-2 scrollbar-hide">
                   <div className={`py-4 px-6 rounded-lg cursor-pointer ${param == '/pengaturan' + '' ? 'bg-primary text-white' : param == '/pengaturan?name=' ? 'bg-primary text-white' : 'bg-white'}`} onClick={() => handleCategoryParam('')}>
                     <p className='text-[16px] font-poppins_medium'>Semua</p>
                   </div>
                   {category?.length > 0 ? (
                     category.map((data, index) => (
-                      <div className={`py-4 px-6 rounded-lg cursor-pointer ${param == '/pengaturan?name=' + encodeURIComponent(data.name) ? 'bg-primary text-white' : 'bg-white'}`} key={index} onClick={() => handleCategoryParam(data.name)}>
+                      <div className={`py-4 px-6 rounded-lg relative cursor-pointer ${param == '/pengaturan?name=' + encodeURIComponent(data.name) ? 'bg-primary text-white' : 'bg-white'}`} key={index} onClick={() => handleCategoryParam(data.name)}>
+                        <div className="scale-75 absolute right-[-12px] top-[-12px]">
+                          <BtnComponent
+                            icon='delete'
+                            paddingX='8'
+                            paddingY='8'
+                            onClick={() => handleDeleteCategory(data.id, data.name)}
+                          />
+                        </div>
                         <p className='text-[16px] font-poppins_medium'>{data.name}</p>
                       </div>
                     ))
@@ -182,7 +232,7 @@ const page = usePage<any>();
                   )}
                 </div>
               </div>
-              <div className="mt-12 flex justify-start items-start flex-wrap gap-8">
+              <div className="mt-10 flex justify-start items-start flex-wrap gap-8">
                 {product.length > 0 ? (
                   product.map((data, index) => (
                     <div className="flex flex-col" key={index}>
